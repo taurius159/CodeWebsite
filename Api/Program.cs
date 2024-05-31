@@ -1,4 +1,6 @@
 using Api.Data;
+using Api.Mappings;
+using Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +17,13 @@ builder.Services.AddDbContext<CodeWebsiteDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeWebsiteConnectionString")));
 
 // Add api versioning
-
 builder.Services.AddApiVersioning();
+
+// Add SQLBlogPostRepository
+builder.Services.AddScoped<IBlogPostRepository, SQLBlogPostRepository>();
+
+// Add auto mapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
