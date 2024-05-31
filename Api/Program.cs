@@ -14,6 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CodeWebsiteDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeWebsiteConnectionString")));
 
+// Add api versioning
+
+builder.Services.AddApiVersioning();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
