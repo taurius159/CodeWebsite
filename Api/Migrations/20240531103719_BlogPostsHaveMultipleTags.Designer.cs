@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(CodeWebsiteDbContext))]
-    partial class CodeWebsiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240531103719_BlogPostsHaveMultipleTags")]
+    partial class BlogPostsHaveMultipleTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,10 @@ namespace Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TagIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UrlHandle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,8 +82,9 @@ namespace Api.Migrations
                             FeaturedImageUrl = "",
                             Heading = "API MVC course Review",
                             PageTitle = "Best intermediate programmer API course",
-                            PublishedDate = new DateTime(2024, 6, 1, 6, 36, 8, 949, DateTimeKind.Local).AddTicks(5314),
+                            PublishedDate = new DateTime(2024, 5, 31, 13, 37, 18, 871, DateTimeKind.Local).AddTicks(2303),
                             ShortDescription = "",
+                            TagIds = "[\"5035a2a2-54f1-4e6a-81b6-40e0b589f637\"]",
                             UrlHandle = "",
                             Visible = true
                         });
@@ -88,6 +96,9 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BlogPostId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -97,6 +108,8 @@ namespace Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BlogPostId");
 
                     b.ToTable("Tags");
 
@@ -121,41 +134,16 @@ namespace Api.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BlogPostTag", b =>
-                {
-                    b.Property<Guid>("BlogPostsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("BlogPostsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("BlogPostTag");
-
-                    b.HasData(
-                        new
-                        {
-                            BlogPostsId = new Guid("a200b634-e8ca-46e8-9c38-def3595b940b"),
-                            TagsId = new Guid("5035a2a2-54f1-4e6a-81b6-40e0b589f637")
-                        });
-                });
-
-            modelBuilder.Entity("BlogPostTag", b =>
+            modelBuilder.Entity("Api.Models.Domain.Tag", b =>
                 {
                     b.HasOne("Api.Models.Domain.BlogPost", null)
-                        .WithMany()
-                        .HasForeignKey("BlogPostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Tags")
+                        .HasForeignKey("BlogPostId");
+                });
 
-                    b.HasOne("Api.Models.Domain.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("Api.Models.Domain.BlogPost", b =>
+                {
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

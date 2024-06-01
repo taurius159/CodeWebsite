@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(CodeWebsiteDbContext))]
-    partial class CodeWebsiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240601031356_manytomanyry")]
+    partial class manytomanyry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,21 +68,6 @@ namespace Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BlogPosts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("a200b634-e8ca-46e8-9c38-def3595b940b"),
-                            Author = "Taurius Antanevicius",
-                            Content = "",
-                            FeaturedImageUrl = "",
-                            Heading = "API MVC course Review",
-                            PageTitle = "Best intermediate programmer API course",
-                            PublishedDate = new DateTime(2024, 6, 1, 6, 36, 8, 949, DateTimeKind.Local).AddTicks(5314),
-                            ShortDescription = "",
-                            UrlHandle = "",
-                            Visible = true
-                        });
                 });
 
             modelBuilder.Entity("Api.Models.Domain.Tag", b =>
@@ -134,13 +122,6 @@ namespace Api.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("BlogPostTag");
-
-                    b.HasData(
-                        new
-                        {
-                            BlogPostsId = new Guid("a200b634-e8ca-46e8-9c38-def3595b940b"),
-                            TagsId = new Guid("5035a2a2-54f1-4e6a-81b6-40e0b589f637")
-                        });
                 });
 
             modelBuilder.Entity("BlogPostTag", b =>

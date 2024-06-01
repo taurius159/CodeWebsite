@@ -1,5 +1,6 @@
 using Api.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Api.Data;
 
@@ -58,6 +59,21 @@ public class CodeWebsiteDbContext : DbContext
                 Visible = true
             }
         };
+
         modelBuilder.Entity<BlogPost>().HasData(blogPosts);
+
+        // Seed BlogPostTag table
+        modelBuilder.Entity<BlogPost>()
+            .HasMany(p => p.Tags)
+            .WithMany(t => t.BlogPosts)
+            .UsingEntity(
+                "BlogPostTag",
+                je =>
+                {
+                    je.HasKey("BlogPostsId", "TagsId");
+                    je.HasData(
+                        new { BlogPostsId = Guid.Parse("a200b634-e8ca-46e8-9c38-def3595b940b"), TagsId = Guid.Parse("5035a2a2-54f1-4e6a-81b6-40e0b589f637")}
+                    );
+                });
     }
 }

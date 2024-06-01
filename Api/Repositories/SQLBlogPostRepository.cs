@@ -17,6 +17,7 @@ public class SQLBlogPostRepository : IBlogPostRepository
     int pageNumber = 1, int pageSize = 1000)
     {
         var blogPosts = dbContext.BlogPosts
+            .Include(x => x.Tags)
             .AsQueryable();
 
         // Filtering
